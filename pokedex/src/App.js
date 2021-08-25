@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react'
 import Router from './routes/Router'
 import styled, {createGlobalStyle} from 'styled-components'
+import { GlobalStorage } from './components/GlobalStorage'
 
 const GlobalStyle = createGlobalStyle`
   html, body {
@@ -12,9 +13,9 @@ const GlobalStyle = createGlobalStyle`
 `
 export default function App() {
   return(
-    <div>
+    <GlobalStorage>
       <GlobalStyle/>
       <Router/>
-    </div>
+    </GlobalStorage>
   )
 }

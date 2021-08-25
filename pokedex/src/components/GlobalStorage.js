@@ -1,7 +1,6 @@
-import React, { createContext } from 'react' 
-import React, { useState } from 'react' 
+import React, { createContext, useState } from 'react' 
 
-export const GlobalContext = createContext() 
+export const GlobalContext = createContext();
 
 export const GlobalStorage = ({ children }) => {
     const [details, setDetails] = useState({}) 
@@ -9,7 +8,6 @@ export const GlobalStorage = ({ children }) => {
         details, 
         setDetails
     }
-
     return ( 
         <GlobalContext.Provider value={values}>
             {children}
