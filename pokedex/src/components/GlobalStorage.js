@@ -4,7 +4,7 @@ export const GlobalContext = createContext();
 
 export const GlobalStorage = ({ children }) => {
     const [pokemonName, setPokemonName] = useState('')
-    const [pokemonPokedex,setPokemonPokedex] = useState([])
+    const [pokemonPokedex, setPokemonPokedex] = useState([])
     const values = {
         pokemonName,
         setPokemonName,
