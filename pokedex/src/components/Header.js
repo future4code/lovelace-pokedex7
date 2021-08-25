@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useHistory, Link } from "react-router-dom";
-import { goToPokedex } from "../routes/coordinator";
+import React from "react";
+import {Link} from "react-router-dom";
 import styled from "styled-components";
 
-const HeaderContainer = styled.header`
-  height: 8vh;
-  background: blue;
+const StyledHeader = styled.header`
+  height: 10vh;
+  background: black;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,75 +14,80 @@ const HeaderContainer = styled.header`
 const StyledFirstButton = styled.button`
   position: absolute;
   left: 10px;
+  a {
+    text-decoration: none;
+  }
   :hover {
     cursor: pointer;
     transform: scale(1.15);
     transition-duration: 1s;
     z-index: 1;
+  }
+  :active {
+    text-decoration:none;
   }
 `;
 const StyledSecondButton = styled.button`
   position: absolute;
   right: 10px;
+  a {
+    text-decoration: none;
+  }
   :hover {
     cursor: pointer;
     transform: scale(1.15);
     transition-duration: 1s;
     z-index: 1;
   }
+  :active {
+    text-decoration:none;
+  }
 `;
 
-export default function Header() {
-  const [pathName, setPathName] = useState("/");
-  const [atualizador, setAtualizador] = useState(0);
-  //Gambiarra para forçar atualização!!!
-  const infosHeader = () => {
-    if (pathName === "/") return {
-        title:"Lista de Pokémons",
-        button:'Ir para Pokédex',
-        //Se o nome do valor for igual ao nome da propriedade, ele automaticamente seta a propriedade, seguindo sua definicição preliminar.
-    };
-    if (pathName === "/pokedex") return {
-        title:"Pokédex",
-        button:'Voltar para Lista de Pokémon',
-    };
-    if (pathName === "/pokemon") return {
-        title:"Só Gambiarra",
-        button:'Ir para Pokédex',
-    };;
-  };
-  const {title, button} = infosHeader()
-
-  useEffect(() => {
-    setPathName(window.location.pathname);
-    console.log(pathName);
-  }, [atualizador]);
-
+export function HomeHeader() {
   return (
-    <HeaderContainer>
-      {pathName === "/pokemon" && (
+    <StyledHeader>
+      <header>
+      Lista de Pokémons
         <StyledFirstButton>
-            <Link
-              onClick={() => {
-                setAtualizador(atualizador + 1);
-              }}
-              to={"/"}
-            >
-              Voltar
-            </Link>
+          <Link to={'/pokedex'}>
+            Ir para Pokédex
+          </Link>
         </StyledFirstButton>
-      )}
-      <h1>{title}</h1>
-      <StyledSecondButton>
-        <Link
-          onClick={() => {
-            setAtualizador(atualizador + 1);
-          }}
-          to={pathName === '/pokedex'? '/pokedex' : '/'}
-        >
-          {button}
-        </Link>
-      </StyledSecondButton>
-    </HeaderContainer>
-  );
+      </header>
+    </StyledHeader>
+  )
+}
+export function PokedexHeader() {
+  return (
+    <StyledHeader>
+      <header>
+      Pokédex
+        <StyledFirstButton>
+          <Link to={'/'}>
+            Voltar para a lista de Pokémons
+          </Link>
+        </StyledFirstButton>
+      </header>
+    </StyledHeader>
+  )
+}
+export function PokemonHeader() {
+  return (
+    <StyledHeader>
+      <header>
+      Pokédex
+        <StyledFirstButton>
+          <Link to={'/'}>
+            Voltar
+          </Link>
+        </StyledFirstButton>
+        <StyledSecondButton>
+          <Link to={'/pokedex'}>
+          Ir para Pokédex
+          </Link>
+        </StyledSecondButton>
+      </header>
+    </StyledHeader>
+  )
 }
