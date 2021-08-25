@@ -1,20 +1,34 @@
 import React from 'react'
-import Header from '../../components/Header'
-import {useHistory} from 'react-router-dom'
-import {goToPokedex} from '../../routes/coordinator'
+import {HomeHeader} from '../../components/Header'
 import styled from 'styled-components'
+import HomePokemonCard from './HomePokemonCard';
 
-const StyledHomeDiv = styled.div`
-    width: 100vw;
-    height: 92vh;
+export const StyledPokemonCard = styled.div`
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: space-around;
-`
+    margin: 20px;
+    flex:1;
+    justify-content: center;
+`;
+
 export default function Home() {
-    const history = useHistory();
     return (
         <div>
+        <HomeHeader/>
+        <StyledPokemonCard>
+            <HomePokemonCard/>
+            <HomePokemonCard/>
+            <HomePokemonCard/>
+            <HomePokemonCard/>
+            <HomePokemonCard/>
+            <HomePokemonCard/>
+            <HomePokemonCard/>
+            <HomePokemonCard/>
+            {/* Obviamente será feito um MAP, algo do tipo:
+                {array?.map(item => {return <HomePokemonCard key={item.name}})}
+            */}
+        </StyledPokemonCard>
         </div>
     )
 }
