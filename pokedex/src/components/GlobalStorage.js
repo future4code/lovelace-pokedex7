@@ -1,14 +1,17 @@
-import React, { createContext, useState } from 'react' 
+import React, { createContext, useState } from 'react'
 
 export const GlobalContext = createContext();
 
 export const GlobalStorage = ({ children }) => {
-    const [details, setDetails] = useState({}) 
-    const values = { 
-        details, 
-        setDetails
+    const [pokemonName, setPokemonName] = useState('')
+    const [pokemonPokedex,setPokemonPokedex] = useState([])
+    const values = {
+        pokemonName,
+        setPokemonName,
+        pokemonPokedex,
+        setPokemonPokedex
     }
-    return ( 
+    return (
         <GlobalContext.Provider value={values}>
             {children}
         </GlobalContext.Provider>
