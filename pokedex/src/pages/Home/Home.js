@@ -1,7 +1,7 @@
 import React from 'react'
 import {HomeHeader} from '../../components/Header'
 import styled from 'styled-components'
-import HomePokemonCard from './HomePokemonCard';
+import HomePokemonCard from '../../components/HomePokemonCard';
 
 export const StyledPokemonCard = styled.div`
     display: flex;
@@ -10,6 +10,7 @@ export const StyledPokemonCard = styled.div`
     margin: 20px;
     flex:1;
     justify-content: center;
+    overflow-y:hidden;
 `;
 
 export default function Home() {
