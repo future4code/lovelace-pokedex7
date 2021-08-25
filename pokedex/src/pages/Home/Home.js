@@ -19,13 +19,6 @@ export default function Home() {
         <HomeHeader/>
         <StyledPokemonCard>
             <HomePokemonCard/>
-            <HomePokemonCard/>
-            <HomePokemonCard/>
-            <HomePokemonCard/>
-            <HomePokemonCard/>
-            <HomePokemonCard/>
-            <HomePokemonCard/>
-            <HomePokemonCard/>
             {/* Obviamente será feito um MAP, algo do tipo:
                 {array?.map(item => {return <HomePokemonCard key={item.name}})}
             */}
