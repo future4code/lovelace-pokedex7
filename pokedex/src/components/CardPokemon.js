@@ -1,11 +1,11 @@
-import React from 'react'
+import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 const StyledPokemonCardDiv = styled.div`
   border: 2px solid black;
   width: 20vw;
-  height: 40vh;;
+  height: 40vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,7 +19,7 @@ const StyledInternPokemonCard = styled.div`
   height: 20vh;
   padding: 10px;
   width: 15vw;
-  gap:30px;
+  gap: 30px;
 `;
 const StyledPokemonCardButton = styled.button`
   a {
@@ -32,7 +32,7 @@ const StyledPokemonCardButton = styled.button`
     z-index: 1;
   }
   :active {
-    text-decoration:none;
+    text-decoration: none;
   }
 `;
 const StyledPokemonCardName = styled.h2`
@@ -44,17 +44,18 @@ const StyledPokemonCardImage = styled.img`
 `;
 
 const CardPokemon = ({ event01, event02, event03, path, array }) => {
-
-  const mapDePokemon = array.map(({ name, url }) => (
+  const mapDePokemon = array.map(({ name, id, sprites: { front_default } }) =>
     array.length ? (
       <StyledPokemonCardDiv key={name}>
-        <StyledPokemonCardImage alt={''} src={""} />
+        <StyledPokemonCardImage alt={''} src={front_default} />
         <StyledPokemonCardName>{name}</StyledPokemonCardName>
         <StyledInternPokemonCard>
-          <StyledPokemonCardButton onClick={() => {
-            event01(url) && event01(url)
-            event03(name) && event03(name)
-          }}>
+          <StyledPokemonCardButton
+            onClick={() => {
+              event01(id) && event01(id);
+              event03(name) && event03(name);
+            }}
+          >
             Adicionar na Pokédex
           </StyledPokemonCardButton>
           <StyledPokemonCardButton onClick={event02(name)}>
@@ -62,16 +63,18 @@ const CardPokemon = ({ event01, event02, event03, path, array }) => {
           </StyledPokemonCardButton>
         </StyledInternPokemonCard>
       </StyledPokemonCardDiv>
-    ) : "Sem pokemon"
-  ))
+    ) : (
+      'Sem pokemon'
+    )
+  );
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+    <div
+      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
+    >
       {mapDePokemon}
     </div>
-  )
-}
+  );
+};
 
-export default CardPokemon
-
-
+export default CardPokemon;
