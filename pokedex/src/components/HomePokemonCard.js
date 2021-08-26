@@ -1,17 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import { GlobalContext } from '../components/GlobalStorage';
 import axios from 'axios';
-import CardPokemon from './CardPokemon';
+import styled from 'styled-components';
+
+import { GlobalContext } from '../components/GlobalStorage';
+import { Link } from 'react-router-dom';
+
+// import CardPokemon from './CardPokemon';
+
+const StyledPokemonCardDiv = styled.div`
+  border: 2px solid black;
+  width: 20vw;
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+`;
+const StyledInternPokemonCard = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 20vh;
+  padding: 10px;
+  width: 15vw;
+  gap: 30px;
+`;
+const StyledPokemonCardButton = styled.button`
+  a {
+    text-decoration: none;
+  }
+  :hover {
+    cursor: pointer;
+    transform: scale(1.15);
+    transition-duration: 1s;
+    z-index: 1;
+  }
+  :active {
+    text-decoration: none;
+  }
+`;
+const StyledPokemonCardName = styled.h2`
+  margin: 10px 0;
+`;
+const StyledPokemonCardImage = styled.img`
+  width: 100%;
+  height: 50%;
+`;
 
 export default function HomePokemonCard() {
   const [pokemon, setPokemon] = useState([]);
 
-  const global = React.useContext(GlobalContext);
+  const { setPokemonName, setPokemonPokedex, pokemonPokedex } =
+    React.useContext(GlobalContext);
 
   const pokemonNumbers = Array.from({ length: 20 }, (_, index) => ++index);
 
   const getPokemon = async () => {
-    const PokemonPromisses = pokemonNumbers.map(async (pokemonId) => {
+    const PokemonPromises = pokemonNumbers.map(async (pokemonId) => {
       let response;
       try {
         response = await axios.get(
@@ -24,7 +70,7 @@ export default function HomePokemonCard() {
       }
     });
 
-    const finallyPokemons = await Promise.all(PokemonPromisses);
+    const finallyPokemons = await Promise.all(PokemonPromises);
 
     setPokemon(finallyPokemons);
   };
@@ -34,19 +80,28 @@ export default function HomePokemonCard() {
     setPokemon(filtraPokemon);
   };
 
-  const renderizaPokemon = () => {
-    return (
-      <CardPokemon
-        array={pokemon}
-        event01={(id) =>
-          global.setPokemonPokedex([...global.pokemonPokedex, id])
-        }
-        event02={(name) => global.setPokemonName(name)}
-        path={'/pokemon'}
-        event03={(name) => removePokemon(name)}
-      />
-    );
-  };
+  const renderizaPokemon = () =>
+    pokemon.length
+      ? pokemon.map(({ name, id, sprites: { front_default } }) => (
+          <StyledPokemonCardDiv key={name}>
+            <StyledPokemonCardImage alt={''} src={front_default} />
+            <StyledPokemonCardName>{name}</StyledPokemonCardName>
+            <StyledInternPokemonCard>
+              <StyledPokemonCardButton
+                onClick={() => {
+                  removePokemon(name);
+                  setPokemonPokedex([...pokemonPokedex, id]);
+                }}
+              >
+                Add á pokedex
+              </StyledPokemonCardButton>
+              <StyledPokemonCardButton onClick={() => setPokemonName(id)}>
+                <Link to={'/pokemon'}>Ver Detalhes</Link>
+              </StyledPokemonCardButton>
+            </StyledInternPokemonCard>
+          </StyledPokemonCardDiv>
+        ))
+      : 'Sem Pokemons';
 
   useEffect(() => {
     getPokemon();
