@@ -1,52 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import styled from 'styled-components';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import {
+  StyledPokemonCardDiv,
+  StyledInternPokemonCard,
+} from "../styleds/HomeStyled";
 
-import { GlobalContext } from '../components/GlobalStorage';
-import { Link } from 'react-router-dom';
-
-// import CardPokemon from './CardPokemon';
-
-const StyledPokemonCardDiv = styled.div`
-  border: 2px solid black;
-  width: 20vw;
-  height: 40vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 10px;
-`;
-const StyledInternPokemonCard = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 20vh;
-  padding: 10px;
-  width: 15vw;
-  gap: 30px;
-`;
-const StyledPokemonCardButton = styled.button`
-  a {
-    text-decoration: none;
-  }
-  :hover {
-    cursor: pointer;
-    transform: scale(1.15);
-    transition-duration: 1s;
-    z-index: 1;
-  }
-  :active {
-    text-decoration: none;
-  }
-`;
-const StyledPokemonCardName = styled.h2`
-  margin: 10px 0;
-`;
-const StyledPokemonCardImage = styled.img`
-  width: 100%;
-  height: 50%;
-`;
+import { GlobalContext } from "../components/GlobalStorage";
+import { Link } from "react-router-dom";
 
 export default function HomePokemonCard() {
   const [pokemon, setPokemon] = useState([]);
@@ -84,24 +44,24 @@ export default function HomePokemonCard() {
     pokemon.length
       ? pokemon.map(({ name, id, sprites: { front_default } }) => (
           <StyledPokemonCardDiv key={name}>
-            <StyledPokemonCardImage alt={''} src={front_default} />
-            <StyledPokemonCardName>{name}</StyledPokemonCardName>
+            <img alt={""} src={front_default} />
+            <h1>{name}</h1>
             <StyledInternPokemonCard>
-              <StyledPokemonCardButton
+              <button
                 onClick={() => {
                   removePokemon(name);
                   setPokemonPokedex([...pokemonPokedex, id]);
                 }}
               >
                 Add á pokedex
-              </StyledPokemonCardButton>
-              <StyledPokemonCardButton onClick={() => setPokemonName(id)}>
-                <Link to={'/pokemon'}>Ver Detalhes</Link>
-              </StyledPokemonCardButton>
+              </button>
+              <button onClick={() => setPokemonName(id)}>
+                <Link to={"/pokemon"}>Ver Detalhes</Link>
+              </button>
             </StyledInternPokemonCard>
           </StyledPokemonCardDiv>
         ))
-      : 'Sem Pokemons';
+      : "Sem Pokemons";
 
   useEffect(() => {
     getPokemon();
@@ -110,6 +70,5 @@ export default function HomePokemonCard() {
   useEffect(() => {
     renderizaPokemon();
   }, [pokemon]);
-  //Pode tirar as chaves.
   return <>{renderizaPokemon()}</>;
 }
