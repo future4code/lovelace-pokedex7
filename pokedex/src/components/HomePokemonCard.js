@@ -3,7 +3,8 @@ import axios from "axios";
 import {
   StyledPokemonCardDiv,
   StyledInternPokemonCard,
-} from "../styleds/HomeStyled";
+  StyledPokemonCardButton
+} from "../styleds/PokemonCardStyles";
 
 import { GlobalContext } from "../components/GlobalStorage";
 import { Link } from "react-router-dom";
@@ -42,22 +43,28 @@ export default function HomePokemonCard() {
 
   const renderizaPokemon = () =>
     pokemon.length
-      ? pokemon.map(({ name, id, sprites: { front_default } }) => (
-          <StyledPokemonCardDiv key={name}>
-            <img alt={""} src={front_default} />
-            <h1>{name}</h1>
+      ? pokemon.map(({ name, id, sprites: { front_default }, types}) => (
+          <StyledPokemonCardDiv type={types[0].type.name} key={name}>
             <StyledInternPokemonCard>
-              <button
-                onClick={() => {
-                  removePokemon(name);
-                  setPokemonPokedex([...pokemonPokedex, id]);
-                }}
-              >
-                Add á pokedex
-              </button>
-              <button onClick={() => setPokemonName(id)}>
-                <Link to={"/pokemon"}>Ver Detalhes</Link>
-              </button>
+              <figure>
+                <img alt={""} src={front_default} />
+              </figure>
+              <h2>{name}</h2>
+              <p>{types[0].type.name}</p>
+              <center>
+                <StyledPokemonCardButton type={types[0].type.name}
+                  onClick={() => {
+                    removePokemon(name);
+                    setPokemonPokedex([...pokemonPokedex, id]);
+                    console.log(types[0].type.name)
+                  }}
+                >
+                  Adicionar à Pokédex
+                </StyledPokemonCardButton>
+                <StyledPokemonCardButton type={types[0].type.name} onClick={() => setPokemonName(id)}>
+                  <Link to={"/pokemon"}>Detalhes</Link>
+                </StyledPokemonCardButton>
+              </center>
             </StyledInternPokemonCard>
           </StyledPokemonCardDiv>
         ))
@@ -70,5 +77,5 @@ export default function HomePokemonCard() {
   useEffect(() => {
     renderizaPokemon();
   }, [pokemon]);
-  return <>{renderizaPokemon()}</>;
-} //abrobora com beiquin
+  return <section style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>{renderizaPokemon()}</section>;
+}
