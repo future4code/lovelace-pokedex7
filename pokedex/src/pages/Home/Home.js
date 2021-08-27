@@ -3,7 +3,7 @@ import {HomeHeader} from '../../components/Header'
 import styled from 'styled-components'
 import HomePokemonCard from '../../components/HomePokemonCard';
 
-export const StyledPokemonCard = styled.div`
+const StyledPokemonCard = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -13,16 +13,14 @@ export const StyledPokemonCard = styled.div`
     overflow-y:hidden;
 `;
 
+
 export default function Home() {
     return (
-        <div>
+        <main>
         <HomeHeader/>
         <StyledPokemonCard>
             <HomePokemonCard/>
-            {/* Obviamente será feito um MAP, algo do tipo:
-                {array?.map(item => {return <HomePokemonCard key={item.name}})}
-            */}
         </StyledPokemonCard>
-        </div>
+        </main>
     )
 }

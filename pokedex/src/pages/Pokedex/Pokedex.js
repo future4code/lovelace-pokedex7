@@ -1,51 +1,13 @@
-import React from 'react';
-import { PokedexHeader } from '../../components/Header';
-import { GlobalContext } from '../../components/GlobalStorage';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-// import CardPokemon from '../../components/CardPokemon';
-
-const StyledPokemonCardDiv = styled.div`
-  border: 2px solid black;
-  width: 20vw;
-  height: 40vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 10px;
-`;
-const StyledInternPokemonCard = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 20vh;
-  padding: 10px;
-  width: 15vw;
-  gap: 30px;
-`;
-const StyledPokemonCardButton = styled.button`
-  a {
-    text-decoration: none;
-  }
-  :hover {
-    cursor: pointer;
-    transform: scale(1.15);
-    transition-duration: 1s;
-    z-index: 1;
-  }
-  :active {
-    text-decoration: none;
-  }
-`;
-const StyledPokemonCardName = styled.h2`
-  margin: 10px 0;
-`;
-const StyledPokemonCardImage = styled.img`
-  width: 100%;
-  height: 50%;
-`;
+import React from "react";
+import { PokedexHeader } from "../../components/Header";
+import { GlobalContext } from "../../components/GlobalStorage";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import {
+  StyledPokemonCardDiv,
+  StyledInternPokemonCard,
+  StyledPokemonCardButton,
+} from "../../styleds/PokemonCardStyles";
 
 export default function Pokedex() {
   const [pokedex, setPokedex] = React.useState([]);
@@ -70,33 +32,39 @@ export default function Pokedex() {
     setPokedex(finalPokedex);
   };
 
-  const romovePokemonPokedex = (pokedexId) => {
+  const removePokemonPokedex = (pokedexId) => {
     const filterPokemon = pokedex.filter(({ id }) => id !== pokedexId);
     setPokedex(filterPokemon);
   };
 
   const showPokemon = () => {
     const map = pokedex.length
-      ? pokedex.map(({ name, id, sprites: { front_default } }) => {
-          return (
-            <StyledPokemonCardDiv key={name}>
-              <StyledPokemonCardImage alt={''} src={front_default} />
-              <StyledPokemonCardName>{name}</StyledPokemonCardName>
-              <StyledInternPokemonCard>
+      ? pokedex.map(({ name, id, sprites: { front_default }, types }) => (
+          <StyledPokemonCardDiv type={types[0].type.name} key={name}>
+            <StyledInternPokemonCard>
+              <figure>
+                <img alt={""} src={front_default} />
+              </figure>
+              <h2>{name}</h2>
+              <p>{types[0].type.name}</p>
+              <center>
                 <StyledPokemonCardButton
-                  onClick={() => romovePokemonPokedex(id)}
+                  type={types[0].type.name}
+                  onClick={() => removePokemonPokedex(id)}
                 >
-                  remover da pokedex
+                  Remover da pokedex
                 </StyledPokemonCardButton>
-                <StyledPokemonCardButton onClick={() => setPokemonName(id)}>
-                  <Link to={'/pokemon'}>Ver Detalhes</Link>
+                <StyledPokemonCardButton
+                  type={types[0].type.name}
+                  onClick={() => setPokemonName(id)}
+                >
+                  <Link to={"/pokemon"}>Detalhes</Link>
                 </StyledPokemonCardButton>
-              </StyledInternPokemonCard>
-            </StyledPokemonCardDiv>
-          );
-        })
-      : 'Sem pokemons';
-
+              </center>
+            </StyledInternPokemonCard>
+          </StyledPokemonCardDiv>
+        ))
+      : "Sem pokemons";
     return map;
   };
 
@@ -105,9 +73,11 @@ export default function Pokedex() {
   }, [setPokemonPokedex()]);
 
   return (
-    <div>
+    <section>
       <PokedexHeader />
-      {showPokemon()}
-    </div>
+      <center style={{justifyContent: 'center', alignItems: 'center',display: 'flex', flexWrap:'wrap'}}>
+        {showPokemon()}
+      </center>
+    </section>
   );
 }
