@@ -1,7 +1,7 @@
-import React from "react";
-import { PokemonHeader } from "../../components/Header";
-import { GlobalContext } from "../../components/GlobalStorage";
-import axios from "axios";
+import React from 'react';
+import { Header } from '../../components/Header';
+import { GlobalContext } from '../../components/GlobalStorage';
+import axios from 'axios';
 
 export default function PokemonDetail() {
   const [pokemonDetails, setPokemonDetails] = React.useState([]);
@@ -19,27 +19,30 @@ export default function PokemonDetail() {
     } finally {
       setPokemonDetails([response.data]);
     }
-}; 
+  };
 
-    const renderPokemonDetail = () => {
-        const detailsMap = pokemonDetails.map((detail) => {
-            return (
-                <div>
-                    {detail.name}
-                </div>
-            )
-        })  
-        return detailsMap
-    }
+  const renderPokemonDetail = () => {
+    const detailsMap = pokemonDetails.map((detail) => {
+      return <div>{detail.name}</div>;
+    });
+    return detailsMap;
+  };
 
-React.useEffect(() => {
+  React.useEffect(() => {
     getPokemonDetails();
-}, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
-    <PokemonHeader /> 
-    {renderPokemonDetail()}
+      <Header
+        title={''}
+        firstPath={'/'}
+        firstButtonName={'Voltar'}
+        secondPath={'/pokedex'}
+        secondButtonName={'Ir para Pokédex'}
+      />
+      {renderPokemonDetail()}
     </>
   );
 }
