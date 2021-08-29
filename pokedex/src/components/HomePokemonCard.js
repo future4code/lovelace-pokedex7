@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+import { GlobalContext } from '../components/GlobalStorage';
 import {
   StyledPokemonCardDiv,
   StyledInternPokemonCard,
-} from "../styleds/HomeStyled";
+  StyledPokemonCardButton,
+} from '../styleds/PokemonCardStyles';
 
-import { GlobalContext } from "../components/GlobalStorage";
-import { Link } from "react-router-dom";
+const HomePokemonCard = () => {
+  const [pokemon, setPokemon] = React.useState([]);
 
-export default function HomePokemonCard() {
-  const [pokemon, setPokemon] = useState([]);
-
-  const { setPokemonName, setPokemonPokedex, pokemonPokedex } =
-    React.useContext(GlobalContext);
+  const { setPokemonName, setPokemonPokedex } = React.useContext(GlobalContext);
 
   const pokemonNumbers = Array.from({ length: 20 }, (_, index) => ++index);
 
-  const getPokemon = async () => {
+  const getPokemon = React.useCallback(async () => {
     const PokemonPromises = pokemonNumbers.map(async (pokemonId) => {
       let response;
       try {
@@ -32,43 +32,78 @@ export default function HomePokemonCard() {
 
     const finallyPokemons = await Promise.all(PokemonPromises);
 
-    setPokemon(finallyPokemons);
-  };
+    setPokemon(() => {
+      !localStorage.length &&
+        localStorage.setItem('pokemons', JSON.stringify(finallyPokemons));
+      return finallyPokemons;
+    });
+  }, [pokemonNumbers]);
 
-  const removePokemon = (pokemonName) => {
-    const filtraPokemon = pokemon.filter(({ name }) => pokemonName !== name);
-    setPokemon(filtraPokemon);
-  };
+  const removePokemon = React.useCallback(
+    (pokemonName) => {
+      const filtraPokemon = pokemon.filter(({ name }) => pokemonName !== name);
+      setPokemon(() => {
+        localStorage.setItem('pokemons', JSON.stringify(filtraPokemon));
+        return filtraPokemon;
+      });
+    },
+    [pokemon]
+  );
 
-  const renderizaPokemon = () =>
-    pokemon.length
-      ? pokemon.map(({ name, id, sprites: { front_default } }) => (
-          <StyledPokemonCardDiv key={name}>
-            <img alt={""} src={front_default} />
-            <h1>{name}</h1>
+  const renderizaPokemon = React.useCallback(
+    () =>
+      JSON.parse(localStorage.getItem('pokemons'))?.map(
+        ({ name, id, sprites: { front_default }, types }) => (
+          <StyledPokemonCardDiv type={types[0].type.name} key={name}>
             <StyledInternPokemonCard>
-              <button
-                onClick={() => {
-                  removePokemon(name);
-                  setPokemonPokedex([...pokemonPokedex, id]);
-                }}
-              >
-                Add á pokedex
-              </button>
-              <button onClick={() => setPokemonName(id)}>
-                <Link to={"/pokemon"}>Ver Detalhes</Link>
-              </button>
+              <figure>
+                <img alt={''} src={front_default} />
+              </figure>
+              <h2>{name}</h2>
+              <p>{types[0].type.name}</p>
+              <center>
+                <StyledPokemonCardButton
+                  type={types[0].type.name}
+                  onClick={() => {
+                    removePokemon(name);
+                    setPokemonPokedex((pokemonPokedex = []) => [
+                      ...pokemonPokedex,
+                      id,
+                    ]);
+                  }}
+                >
+                  Adicionar à Pokédex
+                </StyledPokemonCardButton>
+                <StyledPokemonCardButton
+                  type={types[0].type.name}
+                  onClick={() => setPokemonName(id)}
+                >
+                  <Link to={'/pokemon'}>Detalhes</Link>
+                </StyledPokemonCardButton>
+              </center>
             </StyledInternPokemonCard>
           </StyledPokemonCardDiv>
-        ))
-      : "Sem Pokemons";
+        )
+      ),
+    [removePokemon, setPokemonName, setPokemonPokedex]
+  );
 
-  useEffect(() => {
+  React.useEffect(() => {
     getPokemon();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
+  React.useEffect(() => {
     renderizaPokemon();
-  }, [pokemon]);
-  return <>{renderizaPokemon()}</>;
-} //abrobora com beiquin
+  }, [pokemon, renderizaPokemon]);
+
+  return (
+    <section
+      style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}
+    >
+      {renderizaPokemon()}
+    </section>
+  );
+};
+
+export default HomePokemonCard;
