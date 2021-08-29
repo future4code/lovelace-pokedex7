@@ -1,60 +1,23 @@
 import React from 'react';
-import { PokedexHeader } from '../../components/Header';
-import { GlobalContext } from '../../components/GlobalStorage';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-// import CardPokemon from '../../components/CardPokemon';
 
-const StyledPokemonCardDiv = styled.div`
-  border: 2px solid black;
-  width: 20vw;
-  height: 40vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin: 10px;
-`;
-const StyledInternPokemonCard = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  height: 20vh;
-  padding: 10px;
-  width: 15vw;
-  gap: 30px;
-`;
-const StyledPokemonCardButton = styled.button`
-  a {
-    text-decoration: none;
-  }
-  :hover {
-    cursor: pointer;
-    transform: scale(1.15);
-    transition-duration: 1s;
-    z-index: 1;
-  }
-  :active {
-    text-decoration: none;
-  }
-`;
-const StyledPokemonCardName = styled.h2`
-  margin: 10px 0;
-`;
-const StyledPokemonCardImage = styled.img`
-  width: 100%;
-  height: 50%;
-`;
+import { GlobalContext } from '../../components/GlobalStorage';
+
+import { Header } from '../../components/Header';
+import {
+  StyledPokemonCardDiv,
+  StyledInternPokemonCard,
+  StyledPokemonCardButton,
+} from '../../styleds/PokemonCardStyles';
 
 export default function Pokedex() {
   const [pokedex, setPokedex] = React.useState([]);
 
-  const { pokemonPokedex, setPokemonPokedex, setPokemonName } =
-    React.useContext(GlobalContext);
+  const { pokemonPokedex, setPokemonName } = React.useContext(GlobalContext);
 
-  const addPokemonToPokedex = async () => {
-    const pokedexPromises = pokemonPokedex.map(async (pokemonId) => {
+  const addPokemonToPokedex = React.useCallback(async () => {
+    const pokedexPromises = pokemonPokedex?.map(async (pokemonId) => {
       let response;
       try {
         response = await axios.get(
@@ -68,46 +31,66 @@ export default function Pokedex() {
     });
     const finalPokedex = await Promise.all(pokedexPromises);
     setPokedex(finalPokedex);
-  };
+  }, [pokemonPokedex]);
 
-  const romovePokemonPokedex = (pokedexId) => {
+  const removePokemonPokedex = (pokedexId) => {
     const filterPokemon = pokedex.filter(({ id }) => id !== pokedexId);
     setPokedex(filterPokemon);
   };
 
   const showPokemon = () => {
-    const map = pokedex.length
-      ? pokedex.map(({ name, id, sprites: { front_default } }) => {
-          return (
-            <StyledPokemonCardDiv key={name}>
-              <StyledPokemonCardImage alt={''} src={front_default} />
-              <StyledPokemonCardName>{name}</StyledPokemonCardName>
-              <StyledInternPokemonCard>
-                <StyledPokemonCardButton
-                  onClick={() => romovePokemonPokedex(id)}
-                >
-                  remover da pokedex
-                </StyledPokemonCardButton>
-                <StyledPokemonCardButton onClick={() => setPokemonName(id)}>
-                  <Link to={'/pokemon'}>Ver Detalhes</Link>
-                </StyledPokemonCardButton>
-              </StyledInternPokemonCard>
-            </StyledPokemonCardDiv>
-          );
-        })
-      : 'Sem pokemons';
+    const pokemonsPokedex = pokedex?.map(
+      ({ name, id, sprites: { front_default }, types }) => (
+        <StyledPokemonCardDiv type={types[0].type.name} key={name}>
+          <StyledInternPokemonCard>
+            <figure>
+              <img alt={''} src={front_default} />
+            </figure>
+            <h2>{name}</h2>
+            <p>{types[0].type.name}</p>
+            <center>
+              <StyledPokemonCardButton
+                type={types[0].type.name}
+                onClick={() => removePokemonPokedex(id)}
+              >
+                Remover da pokedex
+              </StyledPokemonCardButton>
+              <StyledPokemonCardButton
+                type={types[0].type.name}
+                onClick={() => setPokemonName(id)}
+              >
+                <Link to={'/pokemon'}>Detalhes</Link>
+              </StyledPokemonCardButton>
+            </center>
+          </StyledInternPokemonCard>
+        </StyledPokemonCardDiv>
+      )
+    );
 
-    return map;
+    return pokemonsPokedex;
   };
 
   React.useEffect(() => {
     addPokemonToPokedex();
-  }, [setPokemonPokedex()]);
+  }, [addPokemonToPokedex]);
 
   return (
-    <div>
-      <PokedexHeader />
-      {showPokemon()}
-    </div>
+    <section>
+      <Header
+        title={'Pokédex'}
+        firstPath={'/'}
+        firstButtonName={'Voltar para a lista de Pokémons'}
+      />
+      <center
+        style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          display: 'flex',
+          flexWrap: 'wrap',
+        }}
+      >
+        {showPokemon()}
+      </center>
+    </section>
   );
 }
