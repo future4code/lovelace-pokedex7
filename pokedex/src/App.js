@@ -9,6 +9,10 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Rubik', sans-serif;
     padding:0;
     margin:0;
+  } 
+
+  li {
+    list-style: none;
   }
 
   a {
