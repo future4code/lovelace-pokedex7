@@ -1,93 +1,65 @@
-import React from "react";
-import {Link} from "react-router-dom";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const StyledHeader = styled.header`
-  height: 10vh;
-  background: black;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  position: relative;
-`;
-const StyledFirstButton = styled.button`
-  position: absolute;
-  left: 10px;
-  a {
-    text-decoration: none;
-  }
-  :hover {
-    cursor: pointer;
-    transform: scale(1.15);
-    transition-duration: 1s;
-    z-index: 1;
-  }
-  :active {
-    text-decoration:none;
-  }
-`;
-const StyledSecondButton = styled.button`
-  position: absolute;
-  right: 10px;
-  a {
-    text-decoration: none;
-  }
-  :hover {
-    cursor: pointer;
-    transform: scale(1.15);
-    transition-duration: 1s;
-    z-index: 1;
-  }
-  :active {
-    text-decoration:none;
+  color: whitesmoke;
+  padding: 0 2%;
+
+  nav {
+    align-items: center;
+    justify-content: space-between;
+    display: flex;
+
+    h1 {
+      font-size: 35px;
+    }
   }
 `;
 
-export function HomeHeader() {
-  return (
-    <StyledHeader>
-      <header>
-      Lista de Pokémons
-        <StyledFirstButton>
-          <Link to={'/pokedex'}>
-            Ir para Pokédex
-          </Link>
-        </StyledFirstButton>
-      </header>
-    </StyledHeader>
-  )
-}
-export function PokedexHeader() {
-  return (
-    <StyledHeader>
-      <header>
-      Pokédex
-        <StyledFirstButton>
-          <Link to={'/'}>
-            Voltar para a lista de Pokémons
-          </Link>
-        </StyledFirstButton>
-      </header>
-    </StyledHeader>
-  )
-}
-export function PokemonHeader() {
-  return (
-    <StyledHeader>
-      <header>
-      Pokédex
-        <StyledFirstButton>
-          <Link to={'/'}>
-            Voltar
-          </Link>
-        </StyledFirstButton>
-        <StyledSecondButton>
-          <Link to={'/pokedex'}>
-          Ir para Pokédex
-          </Link>
-        </StyledSecondButton>
-      </header>
-    </StyledHeader>
-  )
-}
+const Button = styled.button`
+  background: white;
+  border-radius: 10px;
+  padding: 10px 20px;
+  border: 1px solid white;
+  transition-duration: 0.5s;
+
+  a {
+    font-size: 18px;
+    font-weight: 700;
+    color: #919191;
+  }
+
+  &:hover {
+    background: transparent;
+    color: white;
+
+    a {
+      color: white;
+    }
+
+    transform: scale(1.15);
+  }
+`;
+
+export const Header = ({
+  firstPath,
+  firstButtonName,
+  secondPath,
+  secondButtonName,
+  title,
+}) => (
+  <StyledHeader>
+    <nav>
+      <Button>
+        <Link to={firstPath}>{firstButtonName}</Link>
+      </Button>
+      <h1>{title}</h1>
+      {secondPath && (
+        <Button>
+          <Link to={secondPath}>{secondButtonName}</Link>
+        </Button>
+      )}
+    </nav>
+  </StyledHeader>
+);
