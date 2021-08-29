@@ -71,4 +71,4 @@ export default function HomePokemonCard() {
     renderizaPokemon();
   }, [pokemon]);
   return <>{renderizaPokemon()}</>;
-} //abrobora com beiquin
+} 
