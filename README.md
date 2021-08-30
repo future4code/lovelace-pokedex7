@@ -1,16 +1,14 @@
 # POKEDEX
 
 Nome dos integrantes: 
-- Pessoa 1
-- Pessoa 2
-- Pessoa 3
+- Felipe Gushiken
+- Matheus Oliveira Santos
+- Thiago Santiago do Porto
+- Vinícius Silva de Oliveira
 
-Link do Surge: www.link.com.br
+Link do Surge: https://nostalgic-finger.surge.sh/
 
 O que funciona:
-- Item 1
-- Item 2
-
-O que não funciona: 
-- Item 3
-- Item 4
+- Home: o usuário é capaz de receber uma lista de pokemons vinda da API. É possível armazenar Pokemons em sua Pokedex clicando em cada um.
+- Pokedex: o usuário pode ver os Pokemons que foram adicionados em sua Pokedex. 
+- Detalhe do Pokemon: É possível ir para uma página de detalhes do Pokemon ao clicar no mesmo, estando tanto na Home quanto na Pokedex.
